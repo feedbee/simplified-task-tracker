@@ -20,6 +20,8 @@ var Stt = function () {
 			}
 		});
 		$("#c .c-col-no").disableSelection();
+
+		$('#c .c-col-title').editable({mode: 'inline'});
 	}
 	
 	// private
