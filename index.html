@@ -1,0 +1,32 @@
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="s.js"></script>
+  <style>
+    #c-tpl {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <td>Test Server</td>
+        <td>Status</td>
+        <td>#</td>
+        <td>Title</td>
+      </tr>
+    </thead>
+    <tbody id="c">
+      <tr id="c-tpl">
+        <td>{{test_server}}</td>
+        <td>{{status}}</td>
+        <td>{{no}}</td>
+        <td>{{title}}</td>
+      </tr>
+    </tbody>
+</table>
+<script>draw(data);</script>
+</body>
+</html>
