@@ -2,26 +2,53 @@
 <head>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="https://rawgithub.com/shvetsgroup/jquery.multisortable/master/src/jquery.multisortable.js"></script>
   <script src="s.js"></script>
   <style>
+    #c .selected { background-color: lightyellow; }
     #c-tpl {
       display: none;
+    }
+    .c-header > span {
+      font-weight: bold;
+      background-color: lightgray;
+    }
+    #c > li {
+      margin-bottom: .15em;
+    }
+    #c > li > span {
+      display: inline-block;
+      padding: .2em;
+      border: 1px solid black;
+    }
+    .c-col-server {
+      width: 7em;
+    }
+    .c-col-status {
+      width: 6em;
+    }
+    .c-col-no {
+      width: 2em;
+      cursor: move;
+    }
+    .c-col-title {
+      width: 40em;
     }
   </style>
 </head>
 <body>
   <ul id="c">
-    <li>
-      <span>Test Server</span>
-      <span>Status</span>
-      <span>#</span>
-      <span>Title</span>
+    <li class="c-header">
+      <span class="c-col-server">Test Server</span>
+      <span class="c-col-status">Status</span>
+      <span class="c-col-no">#</span>
+      <span class="c-col-title">Title</span>
     </li>
-    <li id="c-tpl">
-      <span>{{test_server}}</span>
-      <span>{{status}}</span>
-      <span>{{no}}</span>
-      <span>{{title}}</span>
+    <li id="c-tpl" data-item-id="{{id}}">
+      <span class="c-col-server">{{test_server}}</span>
+      <span class="c-col-status">{{status}}</span>
+      <span class="c-col-no">{{no}}</span>
+      <span class="c-col-title">[{{id}}] {{title}}</span>
     </li>
   </ul>
   <script>Stt.init();</script>
