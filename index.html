@@ -1,6 +1,7 @@
 <html>
 <head>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="s.js"></script>
   <style>
     #c-tpl {
@@ -9,24 +10,20 @@
   </style>
 </head>
 <body>
-  <table>
-    <thead>
-      <tr>
-        <td>Test Server</td>
-        <td>Status</td>
-        <td>#</td>
-        <td>Title</td>
-      </tr>
-    </thead>
-    <tbody id="c">
-      <tr id="c-tpl">
-        <td>{{test_server}}</td>
-        <td>{{status}}</td>
-        <td>{{no}}</td>
-        <td>{{title}}</td>
-      </tr>
-    </tbody>
-</table>
-<script>draw(data);</script>
+  <ul id="c">
+    <li>
+      <span>Test Server</span>
+      <span>Status</span>
+      <span>#</span>
+      <span>Title</span>
+    </li>
+    <li id="c-tpl">
+      <span>{{test_server}}</span>
+      <span>{{status}}</span>
+      <span>{{no}}</span>
+      <span>{{title}}</span>
+    </li>
+  </ul>
+  <script>Stt.init();</script>
 </body>
 </html>
