@@ -47,7 +47,10 @@ var Stt = function () {
 				.attr('data-sortable', 1);
 			var h = $('<div>').append(b).html();
 			h = setVars(data[x], h);
-			$('#c').append(h);
+			var de = $(h);
+			$('#c').append(de);
+
+			$('.c-control-del', de).on('click', function () { control.del($(this).parent().attr('data-item-id')); });
 		}
 	}
 
@@ -57,6 +60,23 @@ var Stt = function () {
 		}
 		return text;
 	}
+
+	var control = {
+		del: function (id) {
+			var index = null;
+			if (false === data.every(function (el, i) { index = i; return el.id != id; }))
+			{
+				data.splice(index, 1);
+				$('li[data-item-id="' + id + '"]').remove();
+				for (var i = index; i < data.length; i++) {
+					data[i].no = i + 1;
+					$('li[data-item-id="' + data[i].id + '"] > .c-col-no').text(data[i].no);
+				}
+				console.log(data);
+			}
+			// else not found
+		}
+	};
 };
 
 Stt.init = function () {
