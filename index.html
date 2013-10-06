@@ -1,12 +1,16 @@
 <html>
 <head>
+  <meta charset="utf-8">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+  
   <script src="https://rawgithub.com/shvetsgroup/jquery.multisortable/master/src/jquery.multisortable.js"></script>
+  
   <script src="s.js"></script>
   <style>
     #c .selected { background-color: lightyellow; }
-    #c-tpl {
+    #c-tpl, #c-tpl-edit {
       display: none;
     }
     .c-header > span {
@@ -34,6 +38,15 @@
     .c-col-title {
       width: 40em;
     }
+    .c-col-controls > span {
+      height: 1em;
+    }
+    .c-col-controls {
+      padding: .10em !important;
+    }
+    .ui-button-text {
+      font-size: 70%;
+    }
   </style>
 </head>
 <body>
@@ -45,13 +58,29 @@
       <span class="c-col-title">Title</span>
     </li>
     <li id="c-tpl" data-item-id="{{id}}">
-      <span class="c-col-server">{{test_server}}</span>
+      <span class="c-col-server">{{server}}</span>
       <span class="c-col-status">{{status}}</span>
       <span class="c-col-no">{{no}}</span>
-      <span class="c-col-title">[{{id}}] {{title}}</span>
-      <span class="c-control-del">[del]</span>
+      <span class="c-col-title">{{title}}</span>
+      <span class="c-col-controls">
+        <span class="c-control-edit">[edit]</span>
+        <span class="c-control-del">[del]</span>
+      </span>
+    </li>
+    <li id="c-tpl-edit" data-item-id="{{id}}">
+      <span class="c-col-server"><select class="c-tpl-edit-list-server"></select></span>
+      <span class="c-col-status"><select class="c-tpl-edit-list-status"></select></span>
+      <span class="c-col-no">{{no}}</span>
+      <span class="c-col-title"><input type="text" /></span>
+      <span class="c-col-controls c-controls">
+        <span class="c-control-save">[save]</span>
+        <span class="c-control-cancel">[cancel]</span>
+      </span>
     </li>
   </ul>
+  <div class="c-controls">
+    <span class="c-control-create">[new task]</span>
+  <div>
   <script>Stt.init();</script>
 </body>
 </html>
