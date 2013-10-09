@@ -21,9 +21,7 @@ var Stt = function () {
 		});
 		$("#c .c-col-no").disableSelection();
 
-<<<<<<< HEAD
-		$('#c .c-col-title').editable({mode: 'inline'});
-=======
+
 		$.each(statuses, function (k, v) {
 			$('.c-tpl-edit-list-status').append($('<option>', {value: v, text: v}));
 		});
@@ -33,7 +31,6 @@ var Stt = function () {
 
 		$('.c-control-create').button({icons: {primary: "ui-icon-circle-plus"}, text: true, label: 'Create New Task'})
 			.on('click', control.create);
->>>>>>> 16e8975eb5655ff7b9e55ba2174028a9d3bdda95
 	}
 	
 	// private
