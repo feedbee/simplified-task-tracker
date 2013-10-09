@@ -1,0 +1,38 @@
+#c .selected { background-color: lightyellow; }
+#c-tpl, #c-tpl-edit {
+  display: none;
+}
+.c-header > span {
+  font-weight: bold;
+  background-color: lightgray;
+}
+#c > li {
+  margin-bottom: .15em;
+}
+#c > li > span {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid black;
+}
+.c-col-server {
+  width: 7em;
+}
+.c-col-status {
+  width: 6em;
+}
+.c-col-no {
+  width: 2em;
+  cursor: move;
+}
+.c-col-title {
+  width: 40em;
+}
+.c-col-controls > span {
+  height: 1em;
+}
+.c-col-controls {
+  padding: .10em !important;
+}
+.ui-button-text {
+  font-size: 70%;
+}
