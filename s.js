@@ -1,8 +1,51 @@
-var Stt = function () {
+var Stt = function (options) {
 
 	// public 
 
-	this.init = function () {
+	this.getTasks = function () {
+		return data;
+	}
+	this.setTasks = function (newTasks) {
+		data = newTasks;
+		draw();
+	}
+
+	this.addListener = function (type, listener) {
+		if (typeof listeners[type] == "undefined") {
+			listeners[type] = [];
+		}
+
+		listeners[type].push(listener);
+	};
+	this.removeListener = function (type, listener) {
+		if (listeners[type] instanceof Array) {
+			var typeListeners = listeners[type];
+			for (var i = 0, length = typeListeners.length; i < length; i++) {
+				if (typeListeners[i] === listener) {
+					typeListeners.splice(i, 1);
+					break;
+				}
+			}
+		}
+	};
+	
+	// private
+
+	var statuses = undefined;
+	var servers  = undefined;
+
+	var data = undefined;
+	var template = undefined;
+
+	var listeners = {};
+
+	var init = function (options) {
+
+		data = options.tasks;
+		template = (options.taskTemplate);
+		statuses = (options.statuses);
+		servers = (options.servers);
+
 		draw();
 		$('#c').multisortable({handle: ".c-col-no"});
 		$("#c").sortable({
@@ -17,6 +60,8 @@ var Stt = function () {
 					$('li[data-item-id="' + data[i].id + '"] > .c-col-no').text(data[i].no);
 				}
 				sort();
+
+				fire({type: 'datachanged', target: data});
 			}
 		});
 		$("#c .c-col-no").disableSelection();
@@ -32,21 +77,27 @@ var Stt = function () {
 		$('.c-control-create').button({icons: {primary: "ui-icon-circle-plus"}, text: true, label: 'Create New Task'})
 			.on('click', control.create);
 	}
-	
-	// private
 
-	var statuses = ['new', 'dev', 'test', 'ready', 'done'];
-	var servers  = ['–', 'new', 'test'];
+	var self = this;
+	var fire = function (event) {
+		if (typeof event == "string") {
+			event = { type: event };
+		}
+		if (!event.target) {
+			event.target = self;
+		}
 
-	var data = [
-		{id: 1, server: "–",    status:"dev",  no: 1, title: "Task 1"},
-		{id: 2, server: "test", status:"test", no: 2, title: "Task 2"},
-		{id: 3, server: "new",  status:"test", no: 3, title: "Task 3"},
-		{id: 4, server: "–",    status:"dev",  no: 4, title: "Task 4"},
-		{id: 5, server: "new",  status:"done", no: 5, title: "Task 5"},
-		{id: 6, server: "–",    status:"dev",  no: 6, title: "Task 6"}
-	];
-	var template = {id: null, server: "–", status: "new", no: null, title: "New Task"};
+		if (!event.type) {
+			throw new Error("Event object missing 'type' property.");
+		}
+
+		if (listeners[event.type] instanceof Array) {
+			var typeListeners = listeners[event.type];
+			for (var i = 0, length = typeListeners.length; i < length; i++) {
+				typeListeners[i].call(self, event);
+			}
+		}
+	};
 
 	var sort = function () {
 		data.sort(cmp);
@@ -56,14 +107,20 @@ var Stt = function () {
 	}
 
 	var draw = function () {
+		var $c = $('#c');
+		
+		$c.find('[data-element="real"]').remove();
+
+		sort();
 		for (var x in data) {
-			$('#c').append(drawItem(data[x]));
+			$c.append(drawItem(data[x]));
 		}
 	}
 
 	var drawItem = function (item) {
 		var b = $('#c-tpl').clone()
 			.attr('id', null)
+			.attr('data-element', 'real')
 			.attr('data-sortable', 1);
 		var h = $('<div>').append(b).html();
 		h = setVars(item, h);
@@ -99,12 +156,14 @@ var Stt = function () {
 		create: function () {
 			var maxId = 1;
 			$.each(data, function (k, v) { if (v.id > maxId) { maxId = v.id; } });
-			var newItem = $.extend(true, {}, template);
+			var newItem = clone(template);
 			newItem.id = maxId + 1;
 			newItem.no = data.length + 1;
 			$('#c').append(drawItem(newItem));
 
 			data.push(newItem);
+
+			fire({type: 'datachanged', target: data});
 		},
 
 		del: function (id) {
@@ -117,7 +176,8 @@ var Stt = function () {
 					data[i].no = i + 1;
 					$('li[data-item-id="' + data[i].id + '"] > .c-col-no').text(data[i].no);
 				}
-				console.log(data);
+
+				fire({type: 'datachanged', target: data});
 			}
 			// else not found
 		},
@@ -164,7 +224,7 @@ var Stt = function () {
 			dataItem.server = server;
 			dataItem.status = status;
 
-			console.log(data);
+			fire({type: 'datachanged', target: data});
 		},
 
 		editCancel: function (id) {
@@ -173,10 +233,99 @@ var Stt = function () {
 			$ds.last().remove();
 		}
 	};
+
+	var clone = function (obj) {
+		return $.extend(true, {}, obj);
+	}
+
+	// constructor
+
+	init(options);
 };
 
-Stt.init = function () {
-	Stt.instance = new Stt();
-	Stt.instance.init();
+Stt.init = function (options) {
+	if (options === undefined) {
+		options = {};
+	}
+
+	if (!options.tasls && options.persistenceProvider) {
+		var tasks = options.persistenceProvider.getList();
+		if (tasks !== undefined) {
+			options.tasks = tasks;
+		}
+	}
+
+	defaults = {
+		statuses: ['new', 'dev', 'test', 'ready', 'done'],
+		servers:  ['–', 'test1', 'test2'],
+		tasks:    [
+			{id: 1, server: "–",     status:"new",   no: 1, title: "Task 1"},
+			{id: 2, server: "test1", status:"dev",   no: 2, title: "Task 2"},
+			{id: 3, server: "test2", status:"test",  no: 3, title: "Task 3"},
+			{id: 4, server: "–",     status:"ready", no: 4, title: "Task 4"},
+			{id: 5, server: "–",     status:"done",  no: 5, title: "Task 5"},
+		],
+		taskTemplate: {id: null, server: "–", status: "new", no: null, title: "New Task"}
+	};
+	
+	options = $.extend(defaults, options);
+
+	Stt.instance = new Stt(options);
+
+	if (options.persistenceProvider) {
+		options.persistenceProvider.attach(Stt.instance);
+	}
+
 	return Stt.instance;
+};
+Stt.PersistenceProviders = {};
+Stt.PersistenceProviders.HttpRest = function (options) {
+	// {url: ''} [url]/:   GET — task list, PUT — add new task;
+	//           [url]/id: POST — update, GET — get task, DELETE — remove task
+	throw "Not implemented";
+};
+Stt.PersistenceProviders.HttpJson = function (options) {
+	// {url: ''} [url]:    GET  — get task list, POST — update task list;
+	throw "Not implemented";
+};
+Stt.PersistenceProviders.Html5WebStorage = function (options) {
+	// {key: ''}
+	options = $.extend({key: 'SttStorage'}, options);
+
+	var testLs = function () {
+		try {
+			return 'localStorage' in window && window['localStorage'] !== null;
+		} catch (e) {
+			return false;
+		}
+	};
+	var testJson = function () {
+		try {
+			return 'JSON' in window && window['JSON'] !== null;
+		} catch (e) {
+			return false;
+		}
+	};
+
+	if (!testLs() || !testJson()) {
+		throw "Local storage or JSON is not supported in this vrowser";
+	}
+
+	this.update = function (data) {
+		localStorage.setItem(options.key, JSON.stringify(data));
+	};
+
+	this.getList = function (data) {
+		var data = $.parseJSON(localStorage.getItem(options.key));
+		if (data !== null) {
+			return data;
+		} else {
+			return undefined;
+		}
+	};
+
+	this.attach = function (sstInstance) {
+		var self = this;
+		sstInstance.addListener('datachanged', function (e) {self.update(e.target);});
+	};
 };

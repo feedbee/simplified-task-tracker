@@ -44,6 +44,10 @@
   <div class="c-controls">
     <span class="c-control-create">[new task]</span>
   <div>
-  <script>Stt.init();</script>
+  <script>
+    Stt.init(
+      {persistenceProvider: new Stt.PersistenceProviders.Html5WebStorage()}
+    );
+  </script>
 </body>
 </html>
