@@ -220,7 +220,7 @@ var Stt = function () {
 			$('.c-col-status', $row).text(status);
 
 			$row.show();
-			$de.hide();
+			$de.remove();
 
 			var dataItem = getDataItem(id);
 			dataItem.title = title;
