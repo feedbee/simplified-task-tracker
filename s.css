@@ -1,18 +1,47 @@
+body {
+  font-family: Trebuchet, Ubuntu, Arial;
+  font-size: 11pt;
+}
+footer {
+  margin: 2em 0;
+  font-size: 70%;
+  color: gray;
+}
+footer a {
+  color: gray;
+}
+
 #c .selected { background-color: lightyellow; }
 #c-tpl, #c-tpl-edit {
   display: none;
 }
-.c-header > span {
+#c {
+  padding: 0;
+}
+#c > li {
+  border: .1em solid gray;
+  border-radius: .3em;
+  margin-bottom: .15em;
+  padding: .2em 0;
+  list-style: none;
+  background-color: white;
+}
+#c > li.c-header {
   font-weight: bold;
   background-color: lightgray;
 }
-#c > li {
-  margin-bottom: .15em;
+#c > li.placeholder {
+  background-color: red;
 }
 #c > li > span {
+  font-size: 11pt;
   display: inline-block;
-  padding: .2em;
-  border: 1px solid black;
+  padding: .2em .5em;
+  border-left: .1em solid gray;
+}
+#c > li > span:first-child,
+#c > li > span:nth-child(2) {
+  border-left: none;
 }
 .c-col-server {
   width: 7em;
@@ -21,14 +50,23 @@
   width: 6em;
 }
 .c-col-no {
+  padding-left: .8em !important;
   width: 2em;
+  text-align: right;
+}
+li[data-sortable] > .c-col-no:hover {
+  background: url(handler.png) .2em .3em no-repeat;
   cursor: move;
+}
+.c-col-no:after {
+    content: ".";
 }
 .c-col-title {
   width: 40em;
 }
 .c-col-controls > span {
   height: 1em;
+  margin-left: .3em;
 }
 .c-col-controls {
   padding: .10em !important;

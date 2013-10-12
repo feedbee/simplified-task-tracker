@@ -47,8 +47,7 @@ var Stt = function (options) {
 		servers = (options.servers);
 
 		draw();
-		$('#c').multisortable({handle: ".c-col-no"});
-		$("#c").sortable({
+		$('#c').multisortable({
 			items: "> li[data-sortable]",
 			handle: ".c-col-no",
 			cursor: "move",

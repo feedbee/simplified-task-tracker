@@ -6,39 +6,43 @@
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
 
-  <script src="https://rawgithub.com/shvetsgroup/jquery.multisortable/master/src/jquery.multisortable.js"></script>
+  <!--script src="https://rawgithub.com/shvetsgroup/jquery.multisortable/master/src/jquery.multisortable.js"></script-->
+  <script src="ms.js"></script>
   <link href="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/jqueryui-editable/js/jqueryui-editable.min.js"></script>
   <script src="s.js"></script>
 
   <link href="s.css" rel="stylesheet"/>
 </head>
+<body>
+  <h1>Simplified Task Tracked</h1>
   <ul id="c">
-    <li class="c-header">
-      <span class="c-col-server">Test Server</span>
-      <span class="c-col-status">Status</span>
-      <span class="c-col-no">#</span>
-      <span class="c-col-title">Title</span>
+    <li class="c-header"><!--
+      --><span class="c-col-no">#</span><!--
+      --><span class="c-col-title">Title</span><!--
+      --><span class="c-col-server">Test Server</span><!--
+      --><span class="c-col-status">Status</span><!--
+      --><span>Controls</span>
     </li>
-    <li id="c-tpl" data-item-id="{{id}}">
-      <span class="c-col-server">{{server}}</span>
-      <span class="c-col-status">{{status}}</span>
-      <span class="c-col-no">{{no}}</span>
-      <span class="c-col-title">{{title}}</span>
-      <span class="c-col-controls">
-        <span class="c-control-edit">[edit]</span>
-        <span class="c-control-del">[del]</span>
-      </span>
+    <li id="c-tpl" data-item-id="{{id}}"><!--
+      --><span class="c-col-no">{{no}}</span><!--
+      --><span class="c-col-title">{{title}}</span><!--
+      --><span class="c-col-server">{{server}}</span><!--
+      --><span class="c-col-status">{{status}}</span><!--
+      --><span class="c-col-controls"><!--
+        --><span class="c-control-edit">[edit]</span><!--
+        --><span class="c-control-del">[del]</span><!--
+      --></span>
     </li>
-    <li id="c-tpl-edit" data-item-id="{{id}}">
-      <span class="c-col-server"><select class="c-tpl-edit-list-server"></select></span>
-      <span class="c-col-status"><select class="c-tpl-edit-list-status"></select></span>
-      <span class="c-col-no">{{no}}</span>
-      <span class="c-col-title"><input type="text" /></span>
-      <span class="c-col-controls c-controls">
-        <span class="c-control-save">[save]</span>
-        <span class="c-control-cancel">[cancel]</span>
-      </span>
+    <li id="c-tpl-edit" data-item-id="{{id}}"><!--
+      --><span class="c-col-no">{{no}}</span><!--
+      --><span class="c-col-title"><input type="text" /></span><!--
+      --><span class="c-col-server"><select class="c-tpl-edit-list-server"></select></span><!--
+      --><span class="c-col-status"><select class="c-tpl-edit-list-status"></select></span><!--
+      --><span class="c-col-controls c-controls"><!--
+        --><span class="c-control-save">[save]</span><!--
+        --><span class="c-control-cancel">[cancel]</span><!--
+      --></span>
     </li>
   </ul>
   <div class="c-controls">
@@ -49,5 +53,6 @@
       {persistenceProvider: new Stt.PersistenceProviders.Html5WebStorage()}
     );
   </script>
+  <footer>&copy; 2013, <a href="http://valera.ws" target="_blank" title="Valera Leontyev's Blog">Valera Leontyev</a></footer>
 </body>
 </html>
