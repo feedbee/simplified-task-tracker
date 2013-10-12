@@ -11,9 +11,19 @@ footer a {
   color: gray;
 }
 
+#status {
+  float: right;
+  margin: .2em;
+}
+
 #c .selected { background-color: lightyellow; }
 #c-tpl, #c-tpl-edit {
   display: none;
+}
+#c-loading {
+  text-align: center;
+  font-style: italic;
+  border: none !important;
 }
 #c {
   padding: 0;

@@ -12,9 +12,12 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/jqueryui-editable/js/jqueryui-editable.min.js"></script>
   <script src="s.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.1/dropbox.min.js"></script>
+
   <link href="s.css" rel="stylesheet"/>
 </head>
 <body>
+  <div id="status"></div>
   <h1>Simplified Task Tracked</h1>
   <ul id="c">
     <li class="c-header"><!--
@@ -24,6 +27,7 @@
       --><span class="c-col-status">Status</span><!--
       --><span>Controls</span>
     </li>
+    <li id="c-loading">Loading...</li>
     <li id="c-tpl" data-item-id="{{id}}"><!--
       --><span class="c-col-no">{{no}}</span><!--
       --><span class="c-col-title">{{title}}</span><!--
@@ -51,6 +55,7 @@
   <script>
     Stt.init(
       {persistenceProvider: new Stt.PersistenceProviders.Html5WebStorage()}
+      // {persistenceProvider: new Stt.PersistenceProviders.Dropbox()}
     );
   </script>
   <footer>&copy; 2013, <a href="http://valera.ws" target="_blank" title="Valera Leontyev's Blog">Valera Leontyev</a></footer>

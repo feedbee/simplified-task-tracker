@@ -1,6 +1,8 @@
-var Stt = function (options) {
+var Stt = function () {
 
 	// public 
+
+	this.init = function (o) { init(o); };
 
 	this.getTasks = function () {
 		return data;
@@ -75,6 +77,8 @@ var Stt = function (options) {
 
 		$('.c-control-create').button({icons: {primary: "ui-icon-circle-plus"}, text: true, label: 'Create New Task'})
 			.on('click', control.create);
+
+		$('#c-loading').remove();
 	}
 
 	var self = this;
@@ -238,20 +242,11 @@ var Stt = function (options) {
 	}
 
 	// constructor
-
-	init(options);
 };
 
 Stt.init = function (options) {
 	if (options === undefined) {
 		options = {};
-	}
-
-	if (!options.tasls && options.persistenceProvider) {
-		var tasks = options.persistenceProvider.getList();
-		if (tasks !== undefined) {
-			options.tasks = tasks;
-		}
 	}
 
 	defaults = {
@@ -269,14 +264,24 @@ Stt.init = function (options) {
 	
 	options = $.extend(defaults, options);
 
-	Stt.instance = new Stt(options);
+	Stt.instance = new Stt();
 
 	if (options.persistenceProvider) {
 		options.persistenceProvider.attach(Stt.instance);
+
+		options.persistenceProvider.load(function (tasks) {
+			if (tasks !== undefined) {
+				options.tasks = tasks;
+			}
+			Stt.instance.init(options);
+		});
+	} else {
+		Stt.instance.init(options);
 	}
 
 	return Stt.instance;
 };
+
 Stt.PersistenceProviders = {};
 Stt.PersistenceProviders.HttpRest = function (options) {
 	// {url: ''} [url]/:   GET — task list, PUT — add new task;
@@ -314,13 +319,74 @@ Stt.PersistenceProviders.Html5WebStorage = function (options) {
 		localStorage.setItem(options.key, JSON.stringify(data));
 	};
 
-	this.getList = function (data) {
+	this.load = function (callback) {
 		var data = $.parseJSON(localStorage.getItem(options.key));
 		if (data !== null) {
-			return data;
+			callback(data);
+			return;
 		} else {
-			return undefined;
+			callback(undefined);
+			return;
 		}
+	};
+
+	this.attach = function (sstInstance) {
+		var self = this;
+		sstInstance.addListener('datachanged', function (e) {self.update(e.target);});
+	};
+};
+Stt.PersistenceProviders.Dropbox = function (options) {
+	// {apiKey: ''}
+	options = $.extend({apiKey: '6e45l48npfoxq6c'}, options);
+
+	var client = new Dropbox.Client({key: options.apiKey});
+
+	client.authenticate(function(error, client) {
+		if (error) {
+			alert('Dropbox auth failed: ' + error);
+			return;
+		}
+
+		console.log('Dropbox auth successful');
+	});
+
+	this.update = function (data) {
+
+		$('#status').text('Saving to Dropbox...').show();
+		client.writeFile("sst.json", JSON.stringify(data), function(error, stat) {
+			if (error) {
+				alert("Failed to save data to Dropbox account: " + error);
+				return;
+			}
+
+			$('#status').text('Saved');
+			setTimeout(function() {
+				$('#status').fadeOut('slow');
+			}, 10000);
+		});
+	};
+
+	this.load = function (callback) {
+
+		client.readFile("sst.json", function(error, content) {
+			if (error) {
+				if (error.status == 404) {
+					callback(undefined);
+					return ;
+				}
+				alert("Failed to save data to Dropbox account: " + error);
+				return;
+			}
+
+			var data = $.parseJSON(content);
+			if (data !== null) {
+				callback(data);
+				return;
+			} else {
+				callback(undefined);
+				return
+			}
+		});
 	};
 
 	this.attach = function (sstInstance) {
